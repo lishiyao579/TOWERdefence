@@ -1,20 +1,35 @@
 #include "turnpoint.h"
 #include <QPainter>
-TurnPoint::TurnPoint()//???不知道怎么构造
+TurnPoint::TurnPoint(QPoint p)//???不知道怎么构造
 {
-
+    setX(p.x());
+    setY(p.y());
+    /*
+WayPoint::WayPoint(QPoint pos)
+    : m_pos(pos)
+    , m_nextWayPoint(NULL)
+{
+*/
 }
 
 void TurnPoint::setNextTurn(TurnPoint *nextPoint)
 {
     this->_nextTurn = nextPoint;
 }
-
-TurnPoint* TurnPoint::nextTurn() const
+bool TurnPoint::haveNextTurn() const{
+    if(this->_nextTurn)
+        return true;
+    return false;
+}
+TurnPoint* TurnPoint::getNextTurn() const
 {
     return this->_nextTurn;
 }
 
+TurnPoint* TurnPoint::getNowTurn() const
+{
+    return this->_nowTurn;
+}
 void TurnPoint::draw(QPainter *painter) const
 {
     painter->save();

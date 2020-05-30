@@ -23,13 +23,13 @@ public:
     int getHeight() const{return this->_icon.getHeight();}
     int getWidth() const{return this->_icon.getWidth();}
 
-    bool canCover() const{return this->_coverable;}
-    bool canEat() const{return this->_eatable;}
-
     int getNextX(int direction);
     int getNextY(int direction);
 
     virtual void onErase();
+
+    const string OBJtypeall[4]={"stone","position","tower","waterenermy"};//存所有的游戏对象名字
+
 
     string getObjType() const{return this->_icon.getTypeName();}//返回类名
 
@@ -39,8 +39,7 @@ protected:
     QImage _pic;
     int _pos_x, _pos_y;//该物体在游戏中当前位置（左上角坐标）
     ICON _icon;//可以从ICON中获取对象的素材，尺寸等信息
-    bool _coverable;
-    bool _eatable;
+
 };
 
 #endif // RPGOBJ_H

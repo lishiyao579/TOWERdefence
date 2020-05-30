@@ -3,38 +3,36 @@
 
 void RPGObj::initObj(string type)
 {
-    //TODO 所支持的对象类型应定义为枚举
-    if (type.compare("player")==0){
-        this->_coverable = false;
-        this->_eatable = false;
+    if(type=="waterenermy"){
+        this->_icon = ICON::findICON(type);
+        QImage waterEnermy;
+        waterEnermy.load(":/pics/water1.png");//引入水怪图
+        this->_pic = waterEnermy.copy(QRect(_icon.getSrcX()*ICON::GRID_SIZE, _icon.getSrcY()*ICON::GRID_SIZE, _icon.getWidth()*ICON::GRID_SIZE, _icon.getHeight()*ICON::GRID_SIZE));
     }
-    else if (type.compare("stone")==0){
-        this->_coverable = false;
-        this->_eatable = false;
+    else if(type=="tower"){
+        this->_icon = ICON::findICON(type);
+        QImage tower;
+        tower.load(":/pics/fire1.png");
+        this->_pic = tower.copy(QRect(_icon.getSrcX()*ICON::GRID_SIZE, _icon.getSrcY()*ICON::GRID_SIZE, _icon.getWidth()*ICON::GRID_SIZE, _icon.getHeight()*ICON::GRID_SIZE));
     }
-    else if (type.compare("fruit")==0){
-        this->_coverable = false;
-        this->_eatable = true;
-    }
-    else if (type.compare("tower")==0){
-        this->_coverable = false;
-        this->_eatable = false;
-    }
-    else if (type.compare("position")==0){
-        this->_coverable = false;
-        this->_eatable = false;
-    }
-    else{
-        //TODO 应由专门的错误日志文件记录
-        cout<<"invalid ICON type."<<endl;
-        return;
-    }
+    else
+    {
+        int flag=0;
+        for(int i=0;i<4;i++)
+            if(type==RPGObj::OBJtypeall[i])
+                flag=1;
+        if(!flag){
+            cout<<"invalid ICON type."<<endl;
+            return;
+        }
 
-    this->_icon = ICON::findICON(type);
-    QImage all;
+        this->_icon = ICON::findICON(type);
+        QImage all;
 
-    all.load(":/pics/TileB.png");
-    this->_pic = all.copy(QRect(_icon.getSrcX()*ICON::GRID_SIZE, _icon.getSrcY()*ICON::GRID_SIZE, _icon.getWidth()*ICON::GRID_SIZE, _icon.getHeight()*ICON::GRID_SIZE));
+        all.load(":/pics/TileB.png");
+        this->_pic = all.copy(QRect(_icon.getSrcX()*ICON::GRID_SIZE, _icon.getSrcY()*ICON::GRID_SIZE, _icon.getWidth()*ICON::GRID_SIZE, _icon.getHeight()*ICON::GRID_SIZE));
+    }
+    return;
 }
 
 void RPGObj::show(QPainter * pa){

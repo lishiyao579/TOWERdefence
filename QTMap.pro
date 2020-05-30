@@ -28,9 +28,7 @@ SOURCES += main.cpp\
     mw1.cpp \
     icon.cpp \
     rpgobj.cpp \
-    player.cpp \
     world.cpp \
-    fruit.cpp \
     tower.cpp \
     position.cpp \
     waterenermy.cpp \
@@ -40,9 +38,7 @@ HEADERS  += \
     mw1.h \
     icon.h \
     rpgobj.h \
-    player.h \
     world.h \
-    fruit.h \
     tower.h \
     position.h \
     waterenermy.h \

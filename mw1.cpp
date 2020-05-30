@@ -1,3 +1,4 @@
+
 #include "mw1.h"
 #include "ui_mw1.h"
 #include "icon.h"
@@ -19,7 +20,7 @@ MW1::MW1(QWidget *parent) :
     ui->setupUi(this);
     setFixedSize(32*32,22*32);
     //init game world
-    _game.initWorld();//TODO 应该是输入有效的地图文件
+    _game.initWorld();            //TODO 应该是输入有效的地图文件
 
     timer = new QTimer(this);
     connect(timer,SIGNAL(timeout()),this,SLOT(randomMove()));
@@ -40,16 +41,21 @@ void MW1::paintEvent(QPaintEvent *e){
     QPainter *pa;
     pa = new QPainter();
     pa->begin(this);
-    pa->drawPixmap(0, 0, QPixmap(":/pics/bg.jpg"));
-
-   // pa->drawPixmap(0,0, QPixmap(":/pics/bg.png"));//,QRect(3,3,4,1));
-
+    QPixmap bgpic(":/pics/bg.jpg");
+    pa->drawPixmap(0, 0, bgpic);
 
     this->_game.show(pa);
+    pa->setPen(QPen(Qt::blue,10));
+
+    pa->drawPoint(0,175);
+   for(int i=0;i<_tower.size();i++){
+        _tower[i]->setTower(pa,QPoint(_tower[i]->getPosX(),_tower[i]->getPosY()));
+    }
+
     pa->end();
     delete pa;
 }
-
+/*
 void MW1::keyPressEvent(QKeyEvent *e)
 {
     //direction = 1,2,3,4 for 上下左右
@@ -78,13 +84,13 @@ void MW1::randomMove(){
     this->_game.handlePlayerMove(d,1);
     this->repaint();
 }
+*/
 
-
-bool MW1::checkTower(QPoint p) const//检查是不是有塔
+bool MW1::checkTower(QPoint p) const//检查附近一定范围内是不是有塔 保证不重叠
 {
-    for(int i =0;i<tower.size();i++ ){
-        if(p.x()==tower[i]->getPosX() && p.y()==tower[i]->getPosY()){
-            return false;
+    for(int i =0;i<_tower.size();i++ ){
+        if(abs(p.x()-_tower[i]->getPosX())<=2*ICON::GRID_SIZE && abs(p.y()-_tower[i]->getPosY())<=2*ICON::GRID_SIZE){
+            return true;
         }
     }
     return false;
@@ -92,14 +98,17 @@ bool MW1::checkTower(QPoint p) const//检查是不是有塔
 
 void MW1::mousePressEvent(QMouseEvent *event)
 {
+    QPoint pressPos = event->pos();
     if(event->button() == Qt::LeftButton)
     {
-        QPoint pressPos = event->pos();
-        if(checkTower(pressPos) && Position::checkTowerPosition(pressPos) && canBuyTower())
+        if(!checkTower(pressPos) && Position::checkTowerPosition(pressPos) && canBuyTower())
         {
-            QPainter *painter;
-            Tower::setTower(painter, pressPos);
-     //   tower.push_back();
+            Tower *t=new Tower(pressPos);
+            _tower.push_back(t);
+
+            update();
+
+            totalTower++;
             totalGold -= towerCost;
         }
     }
@@ -107,7 +116,35 @@ void MW1::mousePressEvent(QMouseEvent *event)
 }
 bool MW1::canBuyTower() const
 {
-    if(this->totalGold >= towerCost)
+  //  if(this->totalGold >= towerCost)
         return true;
-    return false;
+  //  return false;
+}
+
+void MW1::loadTurnPoints()
+{
+    TurnPoint *begin= new TurnPoint(QPoint(0,175));
+    _turnPoint.push_back(begin);
+
+    TurnPoint *p1=new TurnPoint(QPoint(880,175));
+    _turnPoint.push_back(p1);
+
+    TurnPoint *p2=new TurnPoint(QPoint(880,555));
+    _turnPoint.push_back(p2);
+
+    TurnPoint *p3=new TurnPoint(QPoint(607,555));
+    _turnPoint.push_back(p3);
+
+    TurnPoint *p4=new TurnPoint(QPoint(610,290));
+    _turnPoint.push_back(p4);
+
+    TurnPoint *p5=new TurnPoint(QPoint(200,290));
+    _turnPoint.push_back(p5);
+
+    TurnPoint *p6=new TurnPoint(QPoint(212,555));
+    _turnPoint.push_back(p6);
+
+    TurnPoint *des=new TurnPoint(QPoint(0,555));
+    _turnPoint.push_back(des);
+
 }

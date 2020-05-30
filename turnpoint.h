@@ -6,13 +6,19 @@
 class TurnPoint:public QPoint
 {
 public:
-    TurnPoint();
+    TurnPoint(){};
+    TurnPoint(QPoint p);
     void setNextTurn(TurnPoint *nextPoint);
-    TurnPoint* nextTurn() const;
+    TurnPoint *getNextTurn() const;
+    TurnPoint *getNowTurn() const;
+    bool haveNextTurn() const;
+    void setTurnPoint();
     void draw(QPainter *painter) const;
 
+
 protected:
-    TurnPoint * _nextTurn;
+    TurnPoint* _nextTurn;
+    TurnPoint*  _nowTurn;
 
 };
 

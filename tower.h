@@ -4,14 +4,14 @@
 #include <QMediaPlayer>
 #include <vector>
 #include<QPoint>
+
 class Tower : public RPGObj
 {
 public:
-    Tower(){};
+  //  Tower(){};
     Tower(QPoint p);
     bool canUpdate();
-    static void setTower(QPainter *painter, QPoint p);
-  //?怎么处理  static int _towerNum;          //塔总数
+    void setTower(QPainter *painter, QPoint p);    
 
 protected:
     static int _attackRange;       //攻击范围

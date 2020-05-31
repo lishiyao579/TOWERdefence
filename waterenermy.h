@@ -11,7 +11,7 @@ public:
     void run();
     void onErase();
     bool inShootCircle(QPoint ener,QPoint tow,int range);
-    bool atTurnPoint(QPoint ener,QPoint tur,int range);
+    bool atTurnPoint(QPoint ener, TurnPoint *tur, int range);
     //搞一个函数加载拐弯点??
 
 protected:

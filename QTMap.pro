@@ -32,7 +32,9 @@ SOURCES += main.cpp\
     tower.cpp \
     position.cpp \
     waterenermy.cpp \
-    turnpoint.cpp
+    turnpoint.cpp \
+    button.cpp \
+    gamewindow.cpp
 
 HEADERS  += \
     mw1.h \
@@ -42,14 +44,17 @@ HEADERS  += \
     tower.h \
     position.h \
     waterenermy.h \
-    turnpoint.h
+    turnpoint.h \
+    button.h \
+    gamewindow.h
 
 FORMS    += \
     mw1.ui
 
 DISTFILES += \
     ../../Downloads/3.3.28 �������� jc .docx \
-    ../../Downloads/3619.txt
+    ../../Downloads/3619.txt \
+    startpix.jpg
 
 RESOURCES += \
     game.qrc

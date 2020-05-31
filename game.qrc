@@ -5,6 +5,8 @@
         <file>water1.png</file>
         <file>fire1.png</file>
         <file>fire2.png</file>
+        <file>startbtn.png</file>
+        <file>startpix.jpg</file>
     </qresource>
     <qresource prefix="/sounds">
         <file>2953.mp3</file>

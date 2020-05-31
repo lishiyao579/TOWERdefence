@@ -10,7 +10,7 @@ bool WaterEnermy::inShootCircle(QPoint ener,QPoint tow,int range){
 
 
 }
-bool WaterEnermy::atTurnPoint(QPoint ener, QPoint tur, int range){
+bool WaterEnermy::atTurnPoint(QPoint ener, TurnPoint* tur, int range){
 
 
 }
@@ -27,8 +27,8 @@ void WaterEnermy::run(){
     {
         if(_pos.haveNextTurn())
         {
-            _nowPos=_pos.getNowTurn();
-            _nowPos=_pos.getNextTurn();
+            /*_nowPos=_pos.getNowTurn();
+            _nowPos=_pos.getNextTurn();*/
         }
         else
         {

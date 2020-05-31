@@ -8,5 +8,7 @@ int main(int argc, char *argv[])
     MW1 mw;
     mw.show();
 
+
+
     return a.exec();
 }

@@ -7,12 +7,18 @@
 #include <QKeyEvent>
 #include <QTimer>
 #include "rpgobj.h"
-#include "world.h"
-#include "position.h"
 #include "tower.h"
 #include<QPoint>
 #include<math.h>
-#include<turnpoint.h>
+#include "waterenemy.h"
+#include "icon.h"
+#include <QMouseEvent>
+#include <QTime>
+#include <map>
+#include <iostream>
+#include "button.h"
+#include "bullet.h"
+#include "world.h"
 
 class GameWindow : public QMainWindow
 {
@@ -21,12 +27,18 @@ public:
     explicit GameWindow(QWidget *parent = nullptr);
     void paintEvent(QPaintEvent *event);
     void loadTurnPoints();
+
 //    void keyPressEvent(QKeyEvent *);
 
 
 protected slots:
-  //  void randomMove();
+    void updateMap();
     void mousePressEvent(QMouseEvent *event);
+    void setTower(QPoint pos);
+    void setEnemy();
+    void removeEnemy(WaterEnemy *enemy);
+    bool loadWave();
+    void setBullet(Bullet *bullet);
 
 signals:
 
@@ -44,9 +56,15 @@ private:
     World _game;
     QTimer *timer;
     vector<Tower*> _tower;           //存已经安放了的塔
-    vector<TurnPoint*> _turnPoint;   //存拐点
-    int	totalGold=1000;     //起始金币数
-    int totalTower=0;       //总塔数
+    vector<QPoint*> _turnPoint;   //存拐点
+    vector<WaterEnemy*> _enemy;    //存怪
+    int	_totalGold;     //起始金币数
+    int _totalTower;       //总塔数
+    int _waves;
+    QPoint _startPos;
+    QPoint _endPos;
+    void showGold(QPainter *p);
+    void showWave(QPainter *p);
 };
 
 #endif // GAMEWINDOW_H

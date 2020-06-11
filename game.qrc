@@ -7,6 +7,10 @@
         <file>fire2.png</file>
         <file>startbtn.png</file>
         <file>startpix.jpg</file>
+        <file>helpbtn.png</file>
+        <file>helpbg.png</file>
+        <file>return.png</file>
+        <file>bullet.png</file>
     </qresource>
     <qresource prefix="/sounds">
         <file>2953.mp3</file>

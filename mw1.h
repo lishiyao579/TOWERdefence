@@ -5,6 +5,7 @@
 #include <QPainter>
 #include "button.h"
 #include "gamewindow.h"
+#include <QTimer>
 namespace Ui {
 class MW1;
 }

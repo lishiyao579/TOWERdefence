@@ -23,7 +23,6 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-
 SOURCES += main.cpp\
     mw1.cpp \
     icon.cpp \
@@ -31,10 +30,12 @@ SOURCES += main.cpp\
     world.cpp \
     tower.cpp \
     position.cpp \
-    waterenermy.cpp \
     turnpoint.cpp \
     button.cpp \
-    gamewindow.cpp
+    gamewindow.cpp \
+    intrwindow.cpp \
+    waterenemy.cpp \
+    bullet.cpp
 
 HEADERS  += \
     mw1.h \
@@ -43,10 +44,12 @@ HEADERS  += \
     world.h \
     tower.h \
     position.h \
-    waterenermy.h \
     turnpoint.h \
     button.h \
-    gamewindow.h
+    gamewindow.h \
+    intrwindow.h \
+    waterenemy.h \
+    bullet.h
 
 FORMS    += \
     mw1.ui

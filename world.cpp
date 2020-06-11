@@ -1,10 +1,5 @@
 #include "world.h"
-#include "icon.h"
-#include "rpgobj.h"
-#include <QMediaPlayer>
-#include<iostream>
-#include <vector>
-#include"position.h"
+//#include<iostream>
 using namespace std;
 
 World::~World(){

@@ -1,7 +1,6 @@
 #ifndef POSITION_H
 #define POSITION_H
 #include<QPoint>
-#include<tower.h>
 #include"rpgobj.h"
 
 const int posNum=10;

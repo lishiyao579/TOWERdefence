@@ -4,8 +4,13 @@
 #include <vector>
 #include <string>
 #include <QPainter>
-#include "tower.h"
+//#include "tower.h"
 #include "position.h"
+#include "icon.h"
+#include "rpgobj.h"
+#include <QMediaPlayer>
+#include <iostream>
+
 
 class World
 {

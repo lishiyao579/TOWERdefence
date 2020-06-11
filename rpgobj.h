@@ -1,14 +1,17 @@
 #ifndef RPGOBJ_H
 #define RPGOBJ_H
+#include <QObject>
 #include <QMediaPlayer>
 #include <QImage>
 #include <QPainter>
 #include <string>
 #include <icon.h>
 #include <map>
+
 using namespace std;
-class RPGObj
+class RPGObj :public QObject
 {
+    Q_OBJECT
 public:
     RPGObj(){}
 
@@ -23,13 +26,9 @@ public:
     int getHeight() const{return this->_icon.getHeight();}
     int getWidth() const{return this->_icon.getWidth();}
 
-    int getNextX(int direction);
-    int getNextY(int direction);
-
     virtual void onErase();
 
-    const string OBJtypeall[4]={"stone","position","tower","waterenermy"};//存所有的游戏对象名字
-
+    string OBJtypeall[4]={"stone","waterenermy","tower","position"};
 
     string getObjType() const{return this->_icon.getTypeName();}//返回类名
 
@@ -39,7 +38,9 @@ protected:
     QImage _pic;
     int _pos_x, _pos_y;//该物体在游戏中当前位置（左上角坐标）
     ICON _icon;//可以从ICON中获取对象的素材，尺寸等信息
+signals:
 
+public slots:
 };
 
 #endif // RPGOBJ_H

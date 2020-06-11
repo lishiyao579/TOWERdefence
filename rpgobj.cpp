@@ -40,31 +40,6 @@ void RPGObj::show(QPainter * pa){
     pa->drawImage(this->_pos_x*gSize,this->_pos_y*gSize,this->_pic);
 }
 
-int RPGObj::getNextX(int direction){
-    switch (direction){
-        case 1:
-            return this->_pos_x;
-        case 2:
-           return this->_pos_x;
-        case 3:
-           return this->_pos_x-1;
-        case 4:
-           return this->_pos_x+1;
-    }
-}
-
-int RPGObj::getNextY(int direction){
-    switch (direction){
-        case 1:
-            return this->_pos_y - 1;
-        case 2:
-           return this->_pos_y + 1;
-        case 3:
-           return this->_pos_y;
-        case 4:
-           return this->_pos_y;
-    }
-}
 
 void RPGObj::onErase(){
     QMediaPlayer * player = new QMediaPlayer;

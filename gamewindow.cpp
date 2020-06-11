@@ -1,58 +1,55 @@
 #include "gamewindow.h"
-#include "icon.h"
-#include <QMouseEvent>
-#include <QTime>
-#include <QTimer>
-#include <map>
 #include <iostream>
-#include <QPushButton>
-#include "position.h"
-#include "button.h"
 
-using namespace std;
+//using namespace std;
 
-const int towerCost = 100;
+const int towerCost = 200;
 
-GameWindow::GameWindow(QWidget *parent) : QMainWindow(parent)
+GameWindow::GameWindow(QWidget *parent) : QMainWindow(parent),_totalGold(1000),_waves(0),_startPos(0,175),_endPos(0,555)
 {
     setFixedSize(32*32,22*32);
 
-    QPushButton *btn = new QPushButton(this);
-    btn->setFixedSize(100,50);
-    btn->move(0,0);
-    connect(btn, SIGNAL(clicked()), this, SLOT(close()));
-
-
     _game.initWorld();            //init game world
+    this->loadTurnPoints();
 
     timer = new QTimer(this);
-//    connect(timer,SIGNAL(timeout()),this,SLOT(randomMove()));
-        //randomMove()为自定义槽函数
-    timer->start(50);
-    timer->setInterval(500);
 
-    qsrand(QTime(0,0,0).secsTo(QTime::currentTime()));//设置随机种子
+    QTimer::singleShot(100,this,SLOT(loadWave()));
+
+    connect(timer,SIGNAL(timeout()),this,SLOT(updateMap()));
+    timer->start(30);//30ms触发一次timeout↑
+ //   timer->setInterval(50);
+
+  //  qsrand(QTime(0,0,0).secsTo(QTime::currentTime()));//设置随机种子
 }
 
 
 
 void GameWindow::paintEvent(QPaintEvent *e){
 
-    QPainter *pa;
-    pa = new QPainter();
+    QPainter *pa= new QPainter();
     pa->begin(this);
     QPixmap bgpic(":/pics/bg.jpg");
     pa->drawPixmap(0, 0, bgpic);
 
     this->_game.show(pa);
-
-    for(int i=0;i<_tower.size();i++){
+    this->showGold(pa);
+    this->showWave(pa);
+    for(int i=0;i<_tower.size();i++){//画塔
         _tower[i]->setTower(pa,QPoint(_tower[i]->getPosX(),_tower[i]->getPosY()));
     }
-
+    for(int i=0;i<_enemy.size();i++){//画怪
+        _enemy[i]->setEnermy(pa);
+    }
     pa->end();
     delete pa;
 }
+void GameWindow::setTower(QPoint pos){
+    Tower *t=new Tower(pos);//,this);
+    _tower.push_back(t);
+    update();
+}
+
 /*
 void GameWindow::keyPressEvent(QKeyEvent *e)
 {
@@ -83,6 +80,11 @@ void MW1::randomMove(){
     this->repaint();
 }
 */
+void GameWindow::updateMap()
+{
+
+    update();
+}
 
 bool GameWindow::checkTower(QPoint p) const//检查附近一定范围内是不是有塔 保证不重叠
 {
@@ -101,48 +103,114 @@ void GameWindow::mousePressEvent(QMouseEvent *event)
     {
         if(!checkTower(pressPos) && Position::checkTowerPosition(pressPos) && canBuyTower())
         {
-            Tower *t=new Tower(pressPos);
-            _tower.push_back(t);
+            this->setTower(pressPos);
 
-            update();
-
-            totalTower++;
-            totalGold -= towerCost;
+            _totalTower++;
+            _totalGold -= towerCost;
         }
+    }
+    else if(event->button() ==Qt::RightButton){
+
     }
 
 }
 bool GameWindow::canBuyTower() const
 {
-  //  if(this->totalGold >= towerCost)
+    if(this->_totalGold >= towerCost)
         return true;
-  //  return false;
+    return false;
 }
 
 void GameWindow::loadTurnPoints()
 {
-    TurnPoint *begin= new TurnPoint(QPoint(0,175));
+    QPoint *begin=new QPoint(0,160);
     _turnPoint.push_back(begin);
 
-    TurnPoint *p1=new TurnPoint(QPoint(880,175));
+    QPoint *p1=new QPoint(835,160);
     _turnPoint.push_back(p1);
 
-    TurnPoint *p2=new TurnPoint(QPoint(880,555));
+    QPoint *p2=new QPoint(835,540);
     _turnPoint.push_back(p2);
 
-    TurnPoint *p3=new TurnPoint(QPoint(607,555));
+    QPoint *p3=new QPoint(600,540);
     _turnPoint.push_back(p3);
 
-    TurnPoint *p4=new TurnPoint(QPoint(610,290));
+    QPoint *p4=new QPoint(600,285);
     _turnPoint.push_back(p4);
 
-    TurnPoint *p5=new TurnPoint(QPoint(200,290));
+    QPoint *p5=new QPoint(190,285);
     _turnPoint.push_back(p5);
 
-    TurnPoint *p6=new TurnPoint(QPoint(212,555));
+   QPoint *p6=new QPoint(190,540);
     _turnPoint.push_back(p6);
 
-    TurnPoint *des=new TurnPoint(QPoint(0,555));
+    QPoint *des=new QPoint(0,540);
     _turnPoint.push_back(des);
+
+}
+
+void GameWindow::removeEnemy(WaterEnemy *enemy)
+{
+//    _enemy.erase();
+    delete enemy;
+    if (_enemy.size()==0)
+    {
+        ++_waves; // 当前波数加1
+        // 继续读取下一波
+        if (!loadWave())
+        {
+            // 当没有下一波时，这里表示游戏胜利
+            // 设置游戏胜利标志为true
+            //m_gameWin = true;
+            // 游戏胜利转到游戏胜利场景
+            // 这里暂时以打印处理
+        }
+    }
+}
+
+void GameWindow::setEnemy(){
+    WaterEnemy *e=new WaterEnemy(*_turnPoint[0],*_turnPoint.back());
+    _enemy.push_back(e);
+    e->move();
+}
+
+bool GameWindow::loadWave()
+{
+    if (_waves >= 5)        //每轮5波！！！to do：怎么储存更好？
+        return false;
+
+    const int enemyFre =200;
+
+    for (int i=1; i<=6; i++) //每波6个
+    {
+        QTimer::singleShot(i*enemyFre,this,SLOT(setEnemy()));
+     //   setEnemy();
+    }
+
+    _waves++;
+    return true;
+}
+void GameWindow::showGold(QPainter *p){
+    p->save();
+    QRectF rect(10,10,300,50);
+    QFont font("黑体",16,true);
+    QString gold("$$$：%1");
+    p->setFont(font);
+    p->setPen(QColor("blue"));
+    p->drawText(rect,gold.arg(_totalGold));
+    p->restore();
+}
+void GameWindow::showWave(QPainter *p){
+    p->save();
+    QRectF rect(400,10,300,50);
+    QFont font("黑体",16,true);
+    QString gold("wave：%1");
+    p->setFont(font);
+    p->setPen(QColor("blue"));
+    p->drawText(rect,gold.arg(_waves));
+    p->restore();
+}
+
+void GameWindow::setBullet(Bullet* bullet){
 
 }

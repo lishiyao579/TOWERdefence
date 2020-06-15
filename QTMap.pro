@@ -35,7 +35,8 @@ SOURCES += main.cpp\
     gamewindow.cpp \
     intrwindow.cpp \
     waterenemy.cpp \
-    bullet.cpp
+    bullet.cpp \
+    bossenemy.cpp
 
 HEADERS  += \
     mw1.h \
@@ -44,12 +45,12 @@ HEADERS  += \
     world.h \
     tower.h \
     position.h \
-    turnpoint.h \
     button.h \
     gamewindow.h \
     intrwindow.h \
     waterenemy.h \
-    bullet.h
+    bullet.h \
+    bossenemy.h
 
 FORMS    += \
     mw1.ui

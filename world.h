@@ -4,7 +4,6 @@
 #include <vector>
 #include <string>
 #include <QPainter>
-//#include "tower.h"
 #include "position.h"
 #include "icon.h"
 #include "rpgobj.h"
@@ -21,8 +20,6 @@ public:
 
     void show(QPainter * painter);
         //显示游戏世界所有对象
-
-    void eraseObj(int x, int y);
 
 private:
     vector<RPGObj *> _objs;

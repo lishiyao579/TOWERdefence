@@ -7,6 +7,7 @@
 #include <string>
 #include <icon.h>
 #include <map>
+#include <QUrl>
 
 using namespace std;
 class RPGObj :public QObject
@@ -26,7 +27,6 @@ public:
     int getHeight() const{return this->_icon.getHeight();}
     int getWidth() const{return this->_icon.getWidth();}
 
-    virtual void onErase();
 
     string OBJtypeall[4]={"stone","waterenermy","tower","position"};
 

@@ -57,25 +57,3 @@ void World::show(QPainter * painter){
 
 
 }
-
-void World::eraseObj(int x, int y){// to do !!!
-    vector<RPGObj*>::iterator it;
-    it = _objs.begin();
-    while(it!=_objs.end()){
-        int flag1 = ((*it)->getObjType()=="stone"); //不是石头
-        int flag2 = ((*it)->getPosX() == x) && ((*it)->getPosY()==y);//位置重叠
-
-        if (flag1 && flag2){
-            cout<<(*it)->getObjType()<<endl;
-            (*it)->onErase();
-            delete (*it);
-            it = this->_objs.erase(it);
-            break;
-         }
-        else{
-            it++;
-        }
-    }
-
-}
-

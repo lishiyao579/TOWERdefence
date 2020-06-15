@@ -1,45 +1,69 @@
 #include "tower.h"
+#include "gamewindow.h"
 
-int Tower::_attackRange=80;
-int Tower::_shootFreq=10;
+int Tower::_attackRange=100;
+int Tower::_shootFreq=120;
 
-Tower::Tower(QPoint p)//,GameWindow * game)
+Tower::Tower(QPoint p,GameWindow * game)
 {
     this->setPosX(p.x());
     this->setPosY(p.y());
- //   _window=game;
+    _pix=QPixmap(":/pics/fire1.png");
+    _game=game;
+    _timer=new QTimer(this);
+    _enemy=NULL;
 
     connect(_timer, SIGNAL(timeout()), this, SLOT(shoot()));
+
+    //槽函数和信号参数数量必须相同！！！
+
+
+}
+Tower::~Tower(){
+    delete _timer;
+    _timer=NULL;
 }
 
 void Tower::setTower(QPainter* painter, QPoint p)
 {
       painter->save();
 
-      initObj("tower");
-
-      QPixmap tower(":/pics/fire1.png");
-      painter->drawPixmap(p.x()-tower.height()/2,p.y()-tower.width()/2,tower);
+      painter->drawPixmap(p.x()-_pix.height()/2,p.y()-_pix.width()/2,_pix);
 
       painter->setPen(Qt::darkRed);//画攻击圈
       painter->drawEllipse(p,_attackRange,_attackRange);
-
       painter->restore();
 }
 
-WaterEnemy* Tower::lockEnemy(WaterEnemy *enemy){
+void Tower::searchEnemy(){
+
+    if(_enemy){
+        if(!_enemy->inShootCircle(QPoint(getPosX(),getPosY()),_attackRange)){
+            _enemy = NULL;
+            _timer->stop();
+        }
+    }
+    else{
+        for(int i=0;i<_game->Enemys().size();i++){
+            if(_game->Enemys()[i]->inShootCircle(QPoint(getPosX(),getPosY()),_attackRange)){
+                lockEnemy(_game->Enemys()[i]);
+                break;
+            }
+        }
+    }
+
+}
+void Tower::lockEnemy(WaterEnemy *enemy){
     _enemy=enemy;
-    enemy->beShot(this);//!add!!!
-    return _enemy;
+    _timer->start(this->_shootFreq);
 }
 
-void Tower::shoot(GameWindow *game){
-    _timer=new QTimer(this);
-    _timer->start(this->_shootFreq);
-    int hurt=20;
-    Bullet *bullet=new Bullet(hurt,QPoint(getPosX(),getPosY()),QPoint(_enemy->getPosX(),_enemy->getPosY()),_enemy);
-    bullet->move();
- //   bullet->setBullet(painter);
-//怎么画？
+void Tower::shoot(){
+  //  _timer=new QTimer(this);
+    int hurt=10;
+    Bullet *bullet=new Bullet(hurt,QPoint(getPosX(),getPosY()),_enemy,_game);
+ //   bullet->move();
+    _game->setBullet(bullet);
+
 }
 

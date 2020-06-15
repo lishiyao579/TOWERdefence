@@ -5,7 +5,6 @@
 #include "waterenemy.h"
 #include <QPainter>
 
-
 class GameWindow;
 class WaterEnemy;
 class Bullet : public QObject  //画的时候通过塔找到对应的游戏页面然后绘制
@@ -13,7 +12,7 @@ class Bullet : public QObject  //画的时候通过塔找到对应的游戏页�
     Q_OBJECT
     Q_PROPERTY(QPoint _nowPos READ nowPos WRITE setNowPos)
 public:
-    Bullet(int hurt, QPoint startpos, QPoint endpos, WaterEnemy *enemy);
+    Bullet(int hurt, QPoint startpos, WaterEnemy *enemy, GameWindow *game);
 
     QPoint nowPos() const;
     void setNowPos(QPoint nowpos);
@@ -23,6 +22,7 @@ public:
 signals:
 
 public slots:
+    void hitTarget();
 
 private:
     QPoint _startPos;//发射位置
@@ -30,7 +30,8 @@ private:
     QPoint _nowPos;//当前位置
     WaterEnemy* _target;//目标敌人
     int _hurt;//伤害值
-    //GameWindow * _window;//对应的游戏界面
+    GameWindow * _game;//对应的游戏界面
+    QTimer* _timer;
 
 
 

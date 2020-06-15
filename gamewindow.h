@@ -19,6 +19,7 @@
 #include "button.h"
 #include "bullet.h"
 #include "world.h"
+#include "bossenemy.h"
 
 class GameWindow : public QMainWindow
 {
@@ -27,6 +28,11 @@ public:
     explicit GameWindow(QWidget *parent = nullptr);
     void paintEvent(QPaintEvent *event);
     void loadTurnPoints();
+    vector<WaterEnemy*> Enemys()const;
+    vector<QPoint*> turnPoints;   //存拐点,只加载一次，其它形象调用
+    vector<WaterEnemy*> enemys;    //存怪
+    void eraseBullet(Bullet* bullet);
+    void eraseEnemy(WaterEnemy *enemy);
 
 //    void keyPressEvent(QKeyEvent *);
 
@@ -36,28 +42,29 @@ protected slots:
     void mousePressEvent(QMouseEvent *event);
     void setTower(QPoint pos);
     void setEnemy();
-    void removeEnemy(WaterEnemy *enemy);
     bool loadWave();
-    void setBullet(Bullet *bullet);
+    bool checkTower(QPoint P) const;
+    bool canBuyTower() const;
+    void setBoss();
+   // Tower test;
 
 signals:
 
 public slots:
+    void setBullet(Bullet *bullet);
 
 
 
 private slots:
 
-    bool checkTower(QPoint P) const;
-    bool canBuyTower() const;
-   // Tower test;
+
 
 private:
     World _game;
     QTimer *timer;
-    vector<Tower*> _tower;           //存已经安放了的塔
-    vector<QPoint*> _turnPoint;   //存拐点
-    vector<WaterEnemy*> _enemy;    //存怪
+    vector<Tower*> _towers;           //存已经安放了的塔
+    vector<Bullet*> _bullets;//存子弹
+    vector<BossEnemy*> _bosses;
     int	_totalGold;     //起始金币数
     int _totalTower;       //总塔数
     int _waves;
@@ -65,6 +72,12 @@ private:
     QPoint _endPos;
     void showGold(QPainter *p);
     void showWave(QPainter *p);
+    void winGame(QPainter *p);
+    void nextLevel();
+    bool _win;
+    const int _maxwave=4;//一轮有四波
+    const int _resi=2;//每波剩2个时进行下一波
+
 };
 
 #endif // GAMEWINDOW_H

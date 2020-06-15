@@ -40,11 +40,3 @@ void RPGObj::show(QPainter * pa){
     pa->drawImage(this->_pos_x*gSize,this->_pos_y*gSize,this->_pic);
 }
 
-
-void RPGObj::onErase(){
-    QMediaPlayer * player = new QMediaPlayer;
-    player->setMedia(QUrl("qrc:/sounds/2953.mp3"));
-    player->setVolume(30);
-    player->play();
-}
-

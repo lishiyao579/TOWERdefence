@@ -54,6 +54,31 @@
 - 在WaterEnemy.cpp中删除了atTurnPoint函数（之前考虑用判断是否进入拐点控制转弯，故设置此函数。现在采用QProperAnimation控制运动，直接插入key值控制拐弯，故删除此函数，也相应地删除了本类的用于确定拐点的数据成员）；
 - （换用QProperAnimation后WaterEnemy的整体数据成员中没有turnpoint类的对象了，这个类的存在有些多余，功能与Point基本重复，正在一点点做改动，准备删除turnpoint类）
 
+此版本修复了上一版中子弹总是落后于敌人、击中后无法删除这两个bug；
+此版中，游戏基本具备可玩性，子弹可打击，击中后敌人降血，hp为0时敌人死亡。固定了每轮的敌人波数，目前每轮5波。
+设计了敌人产生和死亡音效。
+增加了“win”之后的功能，提供下一关按钮，下一关待写。
+存在的bug：敌人出生时的音乐播放时会报很多查不到的错，有时导致程序异常结束。问题不在音乐文件本身，应该与调用方式有关。待修改。
+
+## - 2020-06-15
+### Added
+- 添加了BossEnemy类，作为高级版敌人，继承WaterEnemy，速度更快，血量更大；
+- gamewindow.cpp中添加了eraseBullet函数（从vector移除子弹）、
+winGame（游戏胜利后输出、绘制）、nextLevel（下一关）
+- waterenemy.cpp中添加onSet、onErase函数，处理音效；
+- bullet.cpp中添加hitTarget函数；
+- 添加了若干对应的新图片、新音效；
+
+### Changed
+- gamewindow.cpp中修改了eraseEnemy函数和loadWaves函数，
+把加载和控制波数的功能完全放在loadWaves中，eraseEnemy处理击中后的奖励金、从vector移除、
+判断游戏是否结束（vector中没有敌人，loadWave返回bool）
+- tower.cpp中修改了searchEnemy函数和lockEnemy函数；
+- bullet.cpp中改变了bullet的调用方式，构造函数中加入Gamewindow*类型的对象，对应当前游戏界面；
+- waterenemy.cpp中增加GameWindow*指针，改变了move函数中key值的设置，
+从直接放点的坐标变为从GameWindow的turnpoints中调用；
+- waterenemy.cpp中改变了beShot函数，达成减血功能；
+
 
 
 

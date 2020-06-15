@@ -79,6 +79,11 @@ winGame（游戏胜利后输出、绘制）、nextLevel（下一关）
 从直接放点的坐标变为从GameWindow的turnpoints中调用；
 - waterenemy.cpp中改变了beShot函数，达成减血功能；
 
+### Removed
+- 彻底删去无用的turnpoint类（用Qpoint代替了原有的功能，有些功能对应封装到其他类里）
+
+
+
 
 
 

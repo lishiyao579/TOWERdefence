@@ -23,4 +23,3 @@ void Button::zoomDown(){
     animation->setEasingCurve(QEasingCurve::OutBounce);
     animation->start();
 }
-

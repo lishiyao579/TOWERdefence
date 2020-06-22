@@ -6,15 +6,15 @@
 #include <QPainter>
 #include <QKeyEvent>
 #include <QTimer>
-#include "rpgobj.h"
-#include "tower.h"
-#include<QPoint>
-#include<math.h>
-#include "waterenemy.h"
-#include "icon.h"
 #include <QMouseEvent>
 #include <QTime>
 #include <map>
+#include <QPoint>
+#include <math.h>
+#include "rpgobj.h"
+#include "tower.h"
+#include "waterenemy.h"
+#include "icon.h"
 #include <iostream>
 #include "button.h"
 #include "bullet.h"
@@ -33,6 +33,12 @@ public:
     vector<WaterEnemy*> enemys;    //存怪
     void eraseBullet(Bullet* bullet);
     void eraseEnemy(WaterEnemy *enemy);
+    void eraseTower(QPoint pos);
+    void enemyAtEnd();
+    void drawMenu(QPainter *pa);//绘制升级选项菜单
+    void showMenu();//展示升级选项菜单按钮
+    void setTowerType(QString type);
+
 
 //    void keyPressEvent(QKeyEvent *);
 
@@ -40,7 +46,7 @@ public:
 protected slots:
     void updateMap();
     void mousePressEvent(QMouseEvent *event);
-    void setTower(QPoint pos);
+    void setTower(QPoint& pos);
     void setEnemy();
     bool loadWave();
     bool checkTower(QPoint P) const;
@@ -70,11 +76,16 @@ private:
     int _waves;
     QPoint _startPos;
     QPoint _endPos;
+    QString _towerType;
     void showGold(QPainter *p);
+    void showHp(QPainter *p);
     void showWave(QPainter *p);
     void winGame(QPainter *p);
+    void loseGame(QPainter *p);
     void nextLevel();
-    bool _win;
+    void exitGame();
+    int _win;
+    int _hp;//命，可承受几个敌人到终点
     const int _maxwave=4;//一轮有四波
     const int _resi=2;//每波剩2个时进行下一波
 

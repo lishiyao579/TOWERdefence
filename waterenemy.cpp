@@ -51,20 +51,21 @@ bool WaterEnemy::inShootCircle(QPoint tow,int range){
 
 void WaterEnemy::move(){
     QPropertyAnimation *animation = new QPropertyAnimation(this,"_nowPos");
-    const double duration=80000.0/_speed; //设置运动总时长
+    double duration=80000.0/_speed; //设置运动总时长
     animation->setDuration(duration);
     animation->setStartValue(*_game->turnPoints[0]);
-    for(int i=1;i<_game->turnPoints.size()-1;i++){
-        animation->setKeyValueAt(0.125*(i+1), *_game->turnPoints[i]);
+    int n=_game->turnPoints.size();
+    for(int i=1;i<n-1;i++){
+        animation->setKeyValueAt((0.125)*(i+1), *_game->turnPoints[i]);
+
     }
     animation->setEndValue(*_game->turnPoints.back());
     animation->start();
+    connect(animation, SIGNAL(finished()), this, SLOT(atEnd()));
 
-
-        //到终点，死，擦除?????处理
 }
 void WaterEnemy::beShot(int hurt){
-    //_hp-=hurt;
+   // _hp-=hurt;
     if(_hp-hurt >0){
         _hp-=hurt;
     }
@@ -74,16 +75,26 @@ void WaterEnemy::beShot(int hurt){
 
     }
 }
+void WaterEnemy::beSlow(double slow){
+    int controlSpeed=0.1;
+    if(_speed/slow>=controlSpeed)
+        _speed=_speed/slow;
+
+}
 void WaterEnemy::onSet(){
     QMediaPlayer *p = new QMediaPlayer;
-    p->setMedia(QUrl(("qrc:/sounds/e-b.wav")));
+    p->setMedia(QUrl(("qrc:/sounds/e-b.mp3")));
     p->setVolume(10);
     p->play();
 }
 void WaterEnemy::onErase(){
     QMediaPlayer *p = new QMediaPlayer;
-    p->setMedia(QUrl("qrc:/sounds/e-mp3"));
+    p->setMedia(QUrl("qrc:/sounds/e-d.mp3"));
     p->setVolume(10);
     p->play();
 
+}
+
+void WaterEnemy::atEnd(){
+    _game->enemyAtEnd();
 }

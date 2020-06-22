@@ -21,6 +21,7 @@ public:
     bool inShootCircle(QPoint tow, int range);
     QPoint nowPos() const;
     void beShot(int hurt);
+    void beSlow(double slow);
     void setNowPos(QPoint nowpos);
     void loadTurns();
     void setHp(QPainter* pa);
@@ -36,6 +37,8 @@ protected:
     QPoint _nowPos;
     QPoint _endPos;
     vector<QPoint> _Turns;
+protected slots:
+    void atEnd();
 
 
 

@@ -1,6 +1,5 @@
 #ifndef WORLD_H
 #define WORLD_H
-#include "rpgobj.h"
 #include <vector>
 #include <string>
 #include <QPainter>
@@ -15,11 +14,10 @@ class World
 {
 public:
     World(){}
-    ~World();
+    ~World(){};
     void initWorld();
-
     void show(QPainter * painter);
-        //显示游戏世界所有对象
+        //显示游戏世界所有只初始化一次的对象
 
 private:
     vector<RPGObj *> _objs;

@@ -13,8 +13,7 @@ public:
         //确定各类物体子素材图片的位置，高、宽等数据
     static ICON findICON(string type);
         //根据物体类型名找到图标
-
-    ICON(){}
+    ICON(){};
     ICON(string name, int x, int y, int w, int h);
     string getTypeName() const{return this->typeName;}
     int getSrcX() const{return this->srcX;}

@@ -14,22 +14,14 @@ class RPGObj :public QObject
 {
     Q_OBJECT
 public:
-    RPGObj(){}
-
     void initObj(string type);
     void show(QPainter * painter);
-
     void setPosX(int x){this->_pos_x=x;}
     void setPosY(int y){this->_pos_y=y;}
-
     int getPosX() const{return this->_pos_x;}
     int getPosY() const{return this->_pos_y;}
-    int getHeight() const{return this->_icon.getHeight();}
-    int getWidth() const{return this->_icon.getWidth();}
-
 
     string OBJtypeall[4]={"stone","waterenermy","tower","position"};
-
     string getObjType() const{return this->_icon.getTypeName();}//返回类名
 
 protected:

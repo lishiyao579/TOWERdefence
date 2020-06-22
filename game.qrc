@@ -19,5 +19,7 @@
         <file>b-b.wav</file>
         <file>e-b.wav</file>
         <file>e-d.mp3</file>
+        <file>t-b.mp3</file>
+        <file>e-b.mp3</file>
     </qresource>
 </RCC>

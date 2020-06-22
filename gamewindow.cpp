@@ -1,24 +1,30 @@
 #include "gamewindow.h"
 #include <iostream>
 
-//using namespace std;
 
 const int _towerCost = 200;
-const int _hitAward = 50;
+const int _hitAward = 25;
 
+template <typename T>
+void deleteObject(T *obj){
+    delete obj;
+    obj = NULL;
+}
 GameWindow::GameWindow(QWidget *parent) : QMainWindow(parent)
 {
     _totalGold=1000;
     _waves=0;
     _startPos=QPoint(0,175);
     _endPos=QPoint(0,555);
-    _win=false;
-    setFixedSize(32*32,22*32);
-
-    _game.initWorld();            //init game world
-    this->loadTurnPoints();
-
+    _win=-1;
+    _hp=3;
+    _towerType=QString::null;
     timer = new QTimer(this);
+
+    setFixedSize(32*32,22*32);
+    _game.initWorld();            //init game world
+    showMenu();
+    this->loadTurnPoints();
 
     QTimer::singleShot(100,this,SLOT(loadWave()));
 
@@ -37,7 +43,7 @@ void GameWindow::paintEvent(QPaintEvent *e){
     pa->begin(this);
     QPixmap bgpic(":/pics/bg.jpg");
     pa->drawPixmap(0, 0, bgpic);
-
+    drawMenu(pa);
     this->_game.show(pa);
     this->showGold(pa);
     this->showWave(pa);
@@ -50,14 +56,17 @@ void GameWindow::paintEvent(QPaintEvent *e){
     for(int i=0;i<_bullets.size();i++){//画子弹
         _bullets[i]->setBullet(pa);
     }
-    if(_win){
+    if(_win==1){
         winGame(pa);
+    }
+    if(_win==0){
+        loseGame(pa);
     }
     pa->end();
     delete pa;
 }
-void GameWindow::setTower(QPoint pos){
-    Tower *t=new Tower(pos,this);
+void GameWindow::setTower(QPoint &pos){
+    Tower *t=new Tower(pos,this,_towerType);
     _towers.push_back(t);
     update();
 }
@@ -83,18 +92,22 @@ bool GameWindow::checkTower(QPoint p) const//检查附近一定范围内是不�
 void GameWindow::mousePressEvent(QMouseEvent *event)
 {
     QPoint pressPos = event->pos();
-    if(event->button() == Qt::LeftButton)
+    //QTimer* doubleTimer =new QTimer(this);
+    if(_towerType==QString::null)
+        return;
+    if(event->button() == Qt::LeftButton)//左键放塔
     {
         if(!checkTower(pressPos) && Position::checkTowerPosition(pressPos) && canBuyTower())
         {
-            this->setTower(pressPos);
+            setTower(pressPos);
 
             _totalTower++;
             _totalGold -= _towerCost;
         }
     }
-    else if(event->button() ==Qt::RightButton){
-
+    else if(event->button() ==Qt::RightButton){//右键拆塔
+        if(checkTower(pressPos))
+            eraseTower(pressPos);
     }
 
 }
@@ -151,38 +164,46 @@ bool GameWindow::loadWave()
     if (_waves >= _maxwave)        //每轮5波！！！to do：怎么储存更好？
         return false;
 
-    const int enemyFre =300;
+    const int enemyFre =500;
 
-    for (int i=1; i<=6; i++) //每波6个
+    for (int i=0; i<=6; i++) //每波6个
     {
         QTimer::singleShot(i*enemyFre,this,SLOT(setEnemy()));
      //   setEnemy();
     }
 
- //   _waves++;
     return true;
 }
 void GameWindow::showGold(QPainter *p){
     p->save();
     QRectF rect(10,10,300,50);
-    QFont font("黑体",16,true);
-    QString gold("$$$：%1------%2");
+    QFont font("Consolas",16,true);
+    QString gold("$$$：%1");
     p->setFont(font);
     p->setPen(QColor("blue"));
-    p->drawText(rect,gold.arg(_totalGold).arg(_bullets.size()));
+    p->drawText(rect,gold.arg(_totalGold));
     p->restore();
 }
 void GameWindow::showWave(QPainter *p){
     p->save();
     QRectF rect(400,10,300,50);
-    QFont font("黑体",16,true);
+    QFont font("Consolas",16,true);
     QString gold("wave：%1");
     p->setFont(font);
     p->setPen(QColor("blue"));
     p->drawText(rect,gold.arg(_waves));
     p->restore();
 }
-
+void GameWindow::showHp(QPainter *p){
+    p->save();
+    QRectF rect(300,10,300,50);
+    QFont font("Consolas",16,true);
+    QString gold("hp：%1");
+    p->setFont(font);
+    p->setPen(QColor("blue"));
+    p->drawText(rect,gold.arg(_hp));
+    p->restore();
+}
 vector<WaterEnemy*> GameWindow::Enemys() const{
     return enemys;
 }
@@ -194,34 +215,72 @@ void GameWindow::setBullet(Bullet* bullet){
 void GameWindow::eraseBullet(Bullet *bullet){
     auto iter = remove(_bullets.begin(), _bullets.end(), bullet);
     _bullets.erase(iter, _bullets.end());
-//    delete bullet;
+  //  delete bullet;//erase 只是从vector删除，bullet还在！！导致看似没攻击却降血
+
 }
 void GameWindow::eraseEnemy(WaterEnemy *enemy){
     _totalGold+=_hitAward;
     auto iter = remove(enemys.begin(), enemys.end(), enemy);
     enemys.erase(iter, enemys.end());
-//    delete enemy;
+  //  delete enemy;
+//    _totalGold
 
     if (enemys.size()==_resi){
         loadWave();
     }
-    if(enemys.empty()&&!loadWave()){
-        _win=true;
+    else if(enemys.empty()&&!loadWave()){
+        _win=1;
         update();
     }
+}
+void GameWindow::eraseTower(QPoint p){
+    for(int i =0;i<_towers.size();i++ ){
+        if(abs(p.x()-_towers[i]->getPosX())<=2*ICON::GRID_SIZE && abs(p.y()-_towers[i]->getPosY())<=2*ICON::GRID_SIZE){
+            auto iter = remove(_towers.begin(), _towers.end(), _towers[i]);
+            deleteObject(*iter);
+            _towers.erase(iter, _towers.end());
+           /* delete _towers[i];
+            while(!_towers.empty()){
+                    vector<Tower*>::iterator it = _towers.end();
+                    _towers.erase(--it);  // not call destruction function.*/
+                    deleteObject(*iter);    // call destruction function.
+              //  }
+        }
+    }
+
+
+}
+void GameWindow::enemyAtEnd(){
+    int nowHp=_hp-1;
+    if(nowHp>0)
+        _hp=nowHp;
+    else
+        _win=0;
 }
 void GameWindow::winGame(QPainter* p){
     p->drawPixmap(0,0,QPixmap(":/pics/winbg.png"));
     p->save();
     QRectF rect(400,350,200,250);
-    QFont font("黑体",16,true);
-    QString words("过关了！");
+    QFont font("Consolas",16,true);
+    QString words("YOU WIN！");
     p->setFont(font);
     p->setPen(QColor("blue"));
     p->drawText(rect,words);
     p->restore();
     nextLevel();
 
+}
+void GameWindow::loseGame(QPainter *p){
+    p->drawPixmap(0,0,QPixmap(":/pics/winbg.png"));
+    p->save();
+    QRectF rect(400,350,200,250);
+    QFont font("Consolas",16,true);
+    QString words("YOU LOSE！");
+    p->setFont(font);
+    p->setPen(QColor("blue"));
+    p->drawText(rect,words);
+    p->restore();
+    exitGame();
 }
 
 void GameWindow::nextLevel(){
@@ -234,4 +293,47 @@ void GameWindow::nextLevel(){
         btn->zoomUp();
 
     });
+}
+void GameWindow::exitGame(){
+    Button *btn=new Button(":/pics/next.png");
+    btn->setParent(this);
+    btn->move(500,550);
+    btn->show();
+    connect(btn, &QPushButton::clicked, this, [=](){
+        btn->zoomDown();
+        btn->zoomUp();
+        this->close();
+    });
+}
+void GameWindow::setTowerType(QString type){
+     _towerType=type;
+}
+void GameWindow::showMenu(){
+    Button *t1=new Button(":/pics/fire1.png");
+    t1->setParent(this);
+    t1->move(930,100);
+    t1->show();
+    connect(t1, &QPushButton::clicked, this, [=](){
+        t1->zoomDown();
+        t1->zoomUp();
+        setTowerType("fire1");
+    });
+    Button *t2=new Button(":/pics/fire2.png");
+    t2->setParent(this);
+    t2->move(930,250);
+    t2->show();
+    connect(t2, &QPushButton::clicked, this, [=](){
+        t2->zoomDown();
+        t2->zoomUp();
+        setTowerType("fire2");
+    });
+}
+void GameWindow::drawMenu(QPainter *pa){
+    pa->save();
+    pa->setPen(QPen(Qt::black,5));
+    pa->drawText(900,50,100,50,Qt::AlignCenter,"菜单区");
+    pa->drawLine(900,0,900,704);
+    //pa->drawRects(QRect(930,100,100,100));
+    pa->restore();
+
 }

@@ -2,11 +2,7 @@
 //#include<iostream>
 using namespace std;
 
-World::~World(){
-}
-
 void World::initWorld(){
-    //TODO 下面的内容应该改为从地图文件装载
 
     RPGObj *p1 = new RPGObj;
     p1->initObj("stone");
@@ -23,6 +19,10 @@ void World::initWorld(){
     p3->setPosX(6);
     p3->setPosY(8);
 
+    this->_objs.push_back(p1);
+    this->_objs.push_back(p2);
+    this->_objs.push_back(p3);
+
     for(int i=0;i<posNum; i++)
     {
         RPGObj *p = new Position;
@@ -32,17 +32,10 @@ void World::initWorld(){
         this->_objs.push_back(p);
     }
 
-
-
-    this->_objs.push_back(p1);
-    this->_objs.push_back(p2);
-    this->_objs.push_back(p3);
-
     QMediaPlayer * player = new QMediaPlayer;
     player->setMedia(QUrl("qrc:/sounds/hdl.mp3"));
     player->setVolume(0);           //目前音量设为0
     player->play();
-
 
 }
 
@@ -52,8 +45,4 @@ void World::show(QPainter * painter){
     for (int i=0;i<n;i++){
         this->_objs[i]->show(painter);
     }
-    //this->_player->show(painter);
-
-
-
 }

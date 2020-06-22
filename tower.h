@@ -15,12 +15,13 @@ class Tower : public RPGObj
 {
     Q_OBJECT
 public:
-    Tower(QPoint p, GameWindow *game);
+    Tower(QPoint p, GameWindow *game,QString type);
     ~Tower();
-    virtual void setTower(QPainter *painter, QPoint p);
+    void setTower(QPainter *painter, QPoint p);
     void lockEnemy(WaterEnemy * enemy);
     void searchEnemy();
     QPoint corr;
+    void onSet();
 
 protected slots:
     void shoot();
@@ -33,6 +34,8 @@ protected:
     WaterEnemy* _enemy;//某一时刻下只会锁定一个攻击对象
     QTimer* _timer;
     GameWindow* _game;
+    QString _type;
+    bool _canSlow;
 
 
 

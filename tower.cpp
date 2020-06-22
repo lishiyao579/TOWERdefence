@@ -4,15 +4,23 @@
 int Tower::_attackRange=100;
 int Tower::_shootFreq=120;
 
-Tower::Tower(QPoint p,GameWindow * game)
+Tower::Tower(QPoint p,GameWindow * game,QString type)
 {
     this->setPosX(p.x());
     this->setPosY(p.y());
-    _pix=QPixmap(":/pics/fire1.png");
+
     _game=game;
     _timer=new QTimer(this);
     _enemy=NULL;
-
+    _type=type;
+    if(type=="fire1"){
+        _pix=QPixmap(":/pics/fire1.png");
+        _canSlow=false;
+    }
+    else if(type=="fire2"){
+        _pix=QPixmap(":/pics/fire2.png");
+        _canSlow=true;
+    }
     connect(_timer, SIGNAL(timeout()), this, SLOT(shoot()));
 
     //槽函数和信号参数数量必须相同！！！
@@ -33,6 +41,7 @@ void Tower::setTower(QPainter* painter, QPoint p)
       painter->setPen(Qt::darkRed);//画攻击圈
       painter->drawEllipse(p,_attackRange,_attackRange);
       painter->restore();
+    //  onSet();//????
 }
 
 void Tower::searchEnemy(){
@@ -61,9 +70,15 @@ void Tower::lockEnemy(WaterEnemy *enemy){
 void Tower::shoot(){
   //  _timer=new QTimer(this);
     int hurt=10;
-    Bullet *bullet=new Bullet(hurt,QPoint(getPosX(),getPosY()),_enemy,_game);
+    Bullet *bullet=new Bullet(hurt,QPoint(getPosX(),getPosY()),_enemy,_game,_canSlow);
  //   bullet->move();
     _game->setBullet(bullet);
 
+}
+void Tower::onSet(){
+    QMediaPlayer *p = new QMediaPlayer;
+    p->setMedia(QUrl(("qrc:/sounds/t-d.mp3")));
+    p->setVolume(10);
+    p->play();
 }
 

@@ -83,6 +83,28 @@ winGame（游戏胜利后输出、绘制）、nextLevel（下一关）
 - 彻底删去无用的turnpoint类（用Qpoint代替了原有的功能，有些功能对应封装到其他类里）
 
 
+## - 2020-06-22
+- 此版本中对塔的设置方法做了改进，可以有两种塔，点击右侧塔的按钮可放对应种类的塔。计划是一个
+攻击塔一个减速塔，但是减速的还没实现，不知道对于运动物体在运动中应该如何改变速度。
+- 增加拆塔功能，右键点击塔位拆塔。但存在bug
+pure virtual method called
+terminate called without an active exception
+目前查到的解决方法都不适用，正在努力修改！！
+- 音乐文件换为MP3格式后可播放，但有些部分播放会导致程序卡顿，故仅在一些部分保留音效。
+
+### Added
+- Tower.cpp中增加canSlow属性，用于设置减速
+- WaterEnemy.cpp中增加beSlow()，控制被减速后的操作。
+- GameWindow.cpp中增加drawMenu、showMenu、setTowerType，前两者控制绘制右侧菜单栏，后者控制右键点击后选择塔的类型
+
+### Changed
+- GameWindow.cpp中改变了eraseBullet中删除bullet的方法，解决了子弹没了敌人还在自动掉血的bug
+- WaterEnemy.cpp中改变了音乐格式，保证可播放
+- Tower.cpp中增加了音效
+- 为了修改拆塔部分还做了许多细小的改动，因为这一版提交后还会不断修改拆塔部分的bug，所以先不叙述这些改动
+
+
+
 
 
 

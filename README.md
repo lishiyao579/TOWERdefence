@@ -129,3 +129,43 @@ terminate called without an active exception
 
 
 
+## - 2020-06-25
+- 完成啦！！！此版本是整体游戏的最终版本，后续会再补充注释，改动使代码更美观，但是整体基本不会再有改动。
+- 完全修复了子弹打完怪还掉血的问题！！！之前一直认为是bullet的delete有问题，或者是塔的问题，
+今天终于发现了是对怪的beShoot函数调用出了问题，应该是被击中时才调用，我写的是只要被击中就每隔30秒调用一次。
+修改了这个困扰我最长时间的bug。
+- 随着上一个问题的解决，也直接明白了我原本的delete没有问题，所以顺利解决了塔的删除问题。
+- 完成了减速塔的设置和攻击。减速塔与攻击塔价格相同，不可攻击，只可使敌人暂停4秒。
+- 修复了有时塔会对着空气打的bug！这是因为怪没有存正在攻击它的塔，如果怪在攻击圈内被打死，则
+无法通知正在攻击的塔此怪已被打死，而怪已在gameWindow界面被删除，则此塔始终对着击灭怪的位置发射子弹。
+修复方式：在WaterEnemy和Tower中添加可以相互通知是否已被打死的函数。
+- 减少了初始金币值，增加了award类，用于游戏开始时随机掉落一次奖励金币，增强可玩性。
+- 修改了拆塔后的奖励金。
+- 美化了界面，添加了树、花、草等装饰。
+- 
+### Added
+- 添加Award.cpp类，继承Button类，作为奖励金币。在游戏开始时随机位置掉落，价值至少200至多800；
+- Award.cpp中新写了fall函数，控制金币掉落；写了onClicked函数，控制点击时加金币；
+- GameWindow.cpp中添加了setAward和fallAward函数，用于处理掉落金币。
+用随机数控制生成金币的位置和面值。
+- GameWindow.cpp中添加了showEnemy函数，显示当前的敌人数量（由于敌人有时重叠，显示数量更便于玩家操作）。
+- GameWindow.cpp中添加了函数模板deleteObj，用于删除怪、子弹、塔，在eraseXXX中被调用并实例化。
+- WaterEnemy.cpp中添加了存hitters的vector、setHitter函数、eraseHitter函数、beKill函数，存储了正在攻击它的所有塔，怪被击灭后通过beKill函数通知这些塔。
+- World.cpp 的initWorld函数中添加了绘制花、树、桩的代码。
+- ICON.cpp中新make_pair了树、花、桩三种obj，用于美化界面。
+- MW1.cpp中添加了playBGM函数，控制背景音乐播放。
+
+
+### Changed
+- bullet.cpp中改变了slowTarget函数的具体实现，从原来的试图控制animation的运动速度，变为现在的直接控制暂停4秒载继续前进；
+- GameWindow.cpp中改变了对loadWave函数的调用，将其改为void类，并用新加的bool型函数canLoadWave作为槽函数，控制调用波数。
+解决了之前会重复调用波数、波数显示增加但未生成敌人的bug。
+- GameWindow.cpp中修改了菜单栏的显示、游戏结束后的显示按钮，使得界面更美观。
+- WaterEnemy.cpp中修改了beSlow函数，由控制运行的duration改为使animation暂停和恢复。
+- IntroWindow.cpp中添加了完整的帮助文档并drawText。
+- GameWIndow.cpp中删去了playBGM函数，统一由MW1播放，可保证三个界面都有BGM。
+
+
+
+
+

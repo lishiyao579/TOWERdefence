@@ -15,7 +15,7 @@ class WaterEnemy : public RPGObj
 public:
     WaterEnemy(QPoint nowpos,QPoint endpos,GameWindow * game);
     void move();
-    void setEnermy(QPainter *pa);
+    virtual void setEnermy(QPainter *pa);
     void onErase();
     void onSet();
     bool inShootCircle(QPoint tow, int range);

@@ -43,6 +43,12 @@ void Tower::setTower(QPainter* painter, QPoint p)
       painter->restore();
     //  onSet();//????
 }
+int Tower::getCenX(){
+   return _pos_x+_pix.width()/2;
+}
+int Tower::getCenY(){
+    return _pos_y+_pix.height()/2;
+}
 
 void Tower::searchEnemy(){
 
@@ -76,9 +82,9 @@ void Tower::shoot(){
 
 }
 void Tower::onSet(){
-    QMediaPlayer *p = new QMediaPlayer;
-    p->setMedia(QUrl(("qrc:/sounds/t-d.mp3")));
-    p->setVolume(10);
-    p->play();
+    QMediaPlayer * player = new QMediaPlayer;
+    player->setMedia(QUrl("qrc:/sounds/t-b.mp3"));
+    player->setVolume(30);
+    player->play();
 }
 

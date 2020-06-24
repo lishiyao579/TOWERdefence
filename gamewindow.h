@@ -21,6 +21,7 @@
 #include "world.h"
 #include "bossenemy.h"
 
+
 class GameWindow : public QMainWindow
 {
     Q_OBJECT
@@ -33,14 +34,9 @@ public:
     vector<WaterEnemy*> enemys;    //存怪
     void eraseBullet(Bullet* bullet);
     void eraseEnemy(WaterEnemy *enemy);
+    void eraseEnemy(BossEnemy *boss);
     void eraseTower(QPoint pos);
     void enemyAtEnd();
-    void drawMenu(QPainter *pa);//绘制升级选项菜单
-    void showMenu();//展示升级选项菜单按钮
-    void setTowerType(QString type);
-
-
-//    void keyPressEvent(QKeyEvent *);
 
 
 protected slots:
@@ -48,11 +44,12 @@ protected slots:
     void mousePressEvent(QMouseEvent *event);
     void setTower(QPoint& pos);
     void setEnemy();
-    bool loadWave();
+    void loadWave();
     bool checkTower(QPoint P) const;
     bool canBuyTower() const;
     void setBoss();
-   // Tower test;
+    void checkWin();
+    void setAward();
 
 signals:
 
@@ -68,9 +65,8 @@ private slots:
 private:
     World _game;
     QTimer *timer;
-    vector<Tower*> _towers;           //存已经安放了的塔
+    vector<Tower*> _towers;  //存已经安放了的塔
     vector<Bullet*> _bullets;//存子弹
-    vector<BossEnemy*> _bosses;
     int	_totalGold;     //起始金币数
     int _totalTower;       //总塔数
     int _waves;
@@ -80,10 +76,15 @@ private:
     void showGold(QPainter *p);
     void showHp(QPainter *p);
     void showWave(QPainter *p);
+    void drawMenu(QPainter *pa);//绘制升级选项菜单
+    void showMenu();//展示升级选项菜单按钮
+    void setTowerType(QString type);
     void winGame(QPainter *p);
     void loseGame(QPainter *p);
     void nextLevel();
     void exitGame();
+    bool win();
+    bool canLoadWave();
     int _win;
     int _hp;//命，可承受几个敌人到终点
     const int _maxwave=4;//一轮有四波

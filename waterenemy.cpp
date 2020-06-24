@@ -84,13 +84,13 @@ void WaterEnemy::beSlow(double slow){
 void WaterEnemy::onSet(){
     QMediaPlayer *p = new QMediaPlayer;
     p->setMedia(QUrl(("qrc:/sounds/e-b.mp3")));
-    p->setVolume(10);
+    p->setVolume(30);
     p->play();
 }
 void WaterEnemy::onErase(){
     QMediaPlayer *p = new QMediaPlayer;
     p->setMedia(QUrl("qrc:/sounds/e-d.mp3"));
-    p->setVolume(10);
+    p->setVolume(30);
     p->play();
 
 }

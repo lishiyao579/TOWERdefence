@@ -6,6 +6,7 @@ class BossEnemy : public WaterEnemy
 {
 public:
     BossEnemy(QPoint nowpos, QPoint endpos, GameWindow *game);
+    void setEnermy(QPainter *pa);
 };
 
 #endif // BOSSENEMY_H

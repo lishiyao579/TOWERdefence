@@ -9,9 +9,12 @@ Bullet::Bullet(int hurt, QPoint startpos, WaterEnemy *enemy, GameWindow* game,bo
     _target=enemy;
     _game=game;
     _timer=new QTimer(this);
-    _canSlow=canslow;
+    _canSlow=1;//canslow;
 }
-
+Bullet::~Bullet(){
+    delete _timer;
+    _timer=NULL;
+}
 void Bullet::setNowPos(QPoint nowpos){
     _nowPos=nowpos;
 }
@@ -39,6 +42,7 @@ void Bullet::hitTarget(){
     if (iter !=_game->enemys.end()){
         _target->beShot(_hurt);//伤害值为1
     }
+
     _game->eraseBullet(this);
 }
 

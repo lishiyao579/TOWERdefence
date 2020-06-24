@@ -13,7 +13,7 @@ class Bullet : public QObject  //画的时候通过塔找到对应的游戏页�
     Q_PROPERTY(QPoint _nowPos READ nowPos WRITE setNowPos)
 public:
     Bullet(int hurt, QPoint startpos, WaterEnemy *enemy, GameWindow *game, bool canslow);
-
+    ~Bullet();
     QPoint nowPos() const;
     void setNowPos(QPoint nowpos);
     void move();

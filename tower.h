@@ -22,6 +22,8 @@ public:
     void searchEnemy();
     QPoint corr;
     void onSet();
+    int getCenX();//获取中心位置的x，y坐标
+    int getCenY();
 
 protected slots:
     void shoot();

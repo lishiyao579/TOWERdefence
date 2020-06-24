@@ -14,6 +14,7 @@
         <file>water2.png</file>
         <file>winbg.png</file>
         <file>next.png</file>
+        <file>award.png</file>
     </qresource>
     <qresource prefix="/sounds">
         <file>b-b.wav</file>
@@ -21,5 +22,6 @@
         <file>e-d.mp3</file>
         <file>t-b.mp3</file>
         <file>e-b.mp3</file>
+        <file>bg.mp3</file>
     </qresource>
 </RCC>

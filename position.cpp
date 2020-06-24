@@ -12,6 +12,8 @@ QPoint Position::towerPos[]={
 };
 bool Position::checkTowerPosition(QPoint p)//检查是不是可以放塔的地方
 {
+   if(p.x()>900)
+       return false;
     for(int i=0;i<posNum; i++){
         if(p.x()-Position::towerPos[i].x()<=2*ICON::GRID_SIZE && p.y()-Position::towerPos[i].y()<=2*ICON::GRID_SIZE)
             return false;

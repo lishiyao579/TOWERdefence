@@ -105,6 +105,26 @@ terminate called without an active exception
 
 
 
+## - 2020-06-24
+- 此版本中设置了第二种敌人BossEnemy，运行速度更快，血量更大。
+- 拆塔仍然存在问题，先delete后erase会导致paintEvent里面调用画图时出问题程序异常结束，而先erase
+也会报错“QObject::killTimer(): Error: timer id 375 is not valid for object 0x28c04cd0 (Bullet, ), timer has not been killed
+        terminate called after throwing an instance of 'std::bad_alloc'
+        what():  std::bad_alloc”
+- 添加了整体的背景音乐
+- 添加了放塔时的背景音乐
+- （此版本主要是为了进行进一步修改bug前保存一次所以进行提交，改动很少且很集中）
+
+### Added
+- GameWindow.cpp中增加了重载的setEnemy函数和erasEnemy函数，改变了参数类型，用于放置bossEnemy类敌人
+- GameWindow.cpp中把检查是否能加载下一波的代码做了封装，即添加了canLoadWave函数
+- GameWindow.cpp中添加setAward函数，尝试添加award机制。
+- WaterEnemy.cpp中写了析构函数，为了便于解决删除敌人时的问题。
+- GameWinodw.cpp中添加了放塔时和背景音乐的播放代码
+
+### Changed
+- GameWindow.cpp中的eraseEnemy、eraseTower、eraseBullet函数都对代码顺序做了一系列改动，目的是
+为了解决删除时的报错和异常结束，但现在没有找到最合适的办法。
 
 
 

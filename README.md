@@ -129,7 +129,8 @@ terminate called without an active exception
 
 
 
-## - 2020-06-25 （压缩包上传）
+## - 2020-06-25 
+（由于误删README文件，push一直失败，故使用压缩包上传）
 - 完成啦！！！此版本是整体游戏的最终版本，后续会再补充注释，改动使代码更美观，但是整体基本不会再有改动。
 - 完全修复了子弹打完怪还掉血的问题！！！之前一直认为是bullet的delete有问题，或者是塔的问题，
 今天终于发现了是对怪的beShoot函数调用出了问题，应该是被击中时才调用，我写的是只要被击中就每隔30秒调用一次。
@@ -156,6 +157,9 @@ terminate called without an active exception
 - MW1.cpp中添加了playBGM函数，控制背景音乐播放。
 
 
+
+## - 2020-06-25   
+（由于误删README文件，push一直失败，只能压缩包上传）
 ### Changed
 - bullet.cpp中改变了slowTarget函数的具体实现，从原来的试图控制animation的运动速度，变为现在的直接控制暂停4秒载继续前进；
 - GameWindow.cpp中改变了对loadWave函数的调用，将其改为void类，并用新加的bool型函数canLoadWave作为槽函数，控制调用波数。
@@ -167,5 +171,23 @@ terminate called without an active exception
 
 
 
+
+## - 2020-06-26 
+（同上 压缩包上传）
+- 完成版。增加了注释，做了小的修补。
+- 修改了每波的敌人数量，使得游戏难度随时间递增。
+- 修改了之前尽管结束仍然可放塔继续操作的bug
+- 设置了成功、失败的音效。
+- 改变了checkWin的调用方式，更高效。
+
+### Added
+- Button.cpp中改变了按钮跳动的方向，使得跳动效果更明显。
+- GameWindow.cpp中补写了析构函数，增加了模板函数deleteObj，对各个对象进行delete处理
+
+### Changed
+- GameWindow.cpp中的winGame和loseGame函数中添加了计时器的停止，修改了之前尽管结束仍然可放塔继续操作的bug
+- ICON.cpp中改写了所有私有成员的名字。
+- GameWindow.cpp中的eraseEnemy中判断enemys的vector是否为空，空则调用checkWin,保证了只在必要的时候调用checkWin而不是像之前每次update都调用。
+- GameWindow.cpp中的enemyAtEnd函数增加了音效播放
 
 

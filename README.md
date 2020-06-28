@@ -208,3 +208,18 @@ terminate called without an active exception
 - WaterEnemy.cpp中，beSlow函数增加了slow参数（int型）。
 - IntroWindow.cpp中对应修改了帮助界面的文字。
 
+
+## - 2020-06-28
+- 在初始界面增加了游戏名字
+- 修改了即便敌人进入大本营仍然会增加金币的小bug
+- 修改了拆塔后塔数未变化的小bug
+- 移动了游戏胜利音乐的播放位置，完全避免了多线程报错。
+- 对加钱、扣钱通过函数处理，取消了原来直接操作变量的很不“面向对象”的写法。
+
+### Added  
+- MW1.cpp中增加了绘制游戏名。
+- GameWindow.cpp中改变了消灭敌人扣钱的方式，增加了addgold函数，控制所有的加钱和减钱的操作。并在相应位置做了改动。
+
+### Changed  
+- GameWindow.cpp中，将播放胜利音乐从winGame中删除，改至checkWin函数中。
+- GameWindow.cpp中的eraseTower函数补上了对塔数的减除。

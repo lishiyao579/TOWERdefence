@@ -223,3 +223,12 @@ terminate called without an active exception
 ### Changed  
 - GameWindow.cpp中，将播放胜利音乐从winGame中删除，改至checkWin函数中。
 - GameWindow.cpp中的eraseTower函数补上了对塔数的减除。
+
+
+## - 2020-06-28-2
+- 非常简单的修改，在游戏界面修改了塔的名字，由“减速塔”改为“暂停塔”，因为有同学试玩时不太理解以为暂停效果时卡顿，故改名。
+
+### Changed
+- GameWindow.cpp中的drawMenu函数中修改了drawText的字符串参数，将“减速塔”改为“攻击塔”。
+
+
